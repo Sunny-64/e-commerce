@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt"); 
 const User = require("./userModel"); 
 const jwt = require("jsonwebtoken"); 
+const Cart = require("./../cart/cartModel"); 
 
 exports.register = async (req, res) => {
     const {name, email, password} = req.body; 
@@ -62,5 +63,22 @@ exports.login = async (req, res) => {
         }catch(err){
             res.json({status : 500, success : false, error : `${err}`})
         }
+    }
+}
+
+exports.saveCart = async (req, res) => {
+    const {productId, quantity, total, name} = req.body
+    const userId = req.user.id
+    try{
+        const cartObj = new Cart(); 
+        cartObj.productId = productId; 
+        cartObj.userId = userId; 
+        cartObj.quantity = quantity; 
+        cartObj.total = total; 
+        cartObj.name = name; 
+        const saveCart = await cartObj.save(); 
+        res.json({status : 200, success : true, message : "Cart saved successfully", data : saveCart});
+    } catch(err){
+        res.json({status : 500, success : false, message : err.message}); 
     }
 }

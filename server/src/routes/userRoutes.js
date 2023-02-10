@@ -7,9 +7,7 @@ router.post("/login", userController.login);
 
 router.use(require("./../middlewares/auth"));
 
-router.get("/order", (req, res)=>{
-    res.send("hello")
-})
+router.post("/cart", userController.saveCart);
 
 router.get("*", (req, res)=> {
     res.json({
